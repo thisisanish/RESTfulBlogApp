@@ -1,14 +1,17 @@
-<% include partials/header %>
+<% include ../partials/header %>
 <div class="ui main text container segment">
     <div class="ui huge header"><%= blog.title %></div>
     <div class="ui top attached">
         <div class="item">
             <img class="ui centered rounded image" src="<%= blog.image %>" alt="">
             <div class="content">
-                <span><%= blog.created.toDateString() %></span><br>
-            </div>
+                <span style="font-size:90%"><%= blog.created.toDateString() %></span><br>
+            </div><hr width="80%">
             <div class="description"><p><%- blog.body %></p></div>
-        </div>
+        </div><br>
+        <div class="meta right" style="float:right;">
+            <span>Submitted by <%= blog.author.username %></em></span>
+        </div> <br>
         <a class="ui orange basic button" href="/blogs/<%= blog._id %>/edit">Edit</a>
         <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
             <button class="ui red basic button">Delete</button>
@@ -18,4 +21,4 @@
     </div>
 </div>
 
-<% include partials/footer %>
+<% include ../partials/footer %>

@@ -1,4 +1,4 @@
-<% include ./partials/header %>
+<% include ../partials/header %>
 
 <div class="ui main text container">
 	<div class="ui huge header">RESTful Blog App</div>
@@ -23,6 +23,9 @@
 								<i class="right chevron icon"></i>
 							</a>
 						</div>
+						<div class="meta">
+							<span>Submitted by <%= blog.author.username %></em></span>
+						</div>
 					</div>
 				</div>
 			<% }) %>
@@ -30,4 +33,4 @@
 	</div>
 </div>
 
-<% include ./partials/footer %>
+<% include ../partials/footer %>

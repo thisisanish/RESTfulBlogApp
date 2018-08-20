@@ -3,124 +3,56 @@ var express = require("express"),
     mongoose = require("mongoose"),
     methodOverride = require("method-override"),
     expressSanitizer = require("express-sanitizer"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    passport = require("passport"),
+    LocalStratergy = require("passport-local"),
+    User = require("./models/user.js"),
+    flash = require("connect-flash");
+
+var blogsRoutes = require("./routes/blogs.js"),
+    indexRoutes = require("./routes/index");
+
+
     
 
 
-mongoose.connect("mongodb://localhost/restful_blog_app")
+// mongoose.connect("mongodb://localhost/restful_blog_app")
+mongoose.connect("mongodb://anish:password1@ds125472.mlab.com:25472/blogapp-proto")
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
-
-// Schema
-
-var blogSchema = new mongoose.Schema({
-    title: String,
-    image: String,
-    body: String,
-    created: {type: Date, default: Date.now}
-});
-var Blog = mongoose.model("Blog", blogSchema);
-
-// Blog.create({
-//     title: "Test Blog",
-//     image: "https://www.revenuearchitects.com/wp-content/uploads/2017/02/Blog_pic.png",
-//     body: "bodybodybodybodybodybodybodybodybodybodybody"
-// });
+app.use(require("express-session")({
+    secret: "Pugs are awesome!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStratergy(User.authenticate())) // remember when we use "local"
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+app.use(flash());
 
 
-// Root
-app.get("/", function(req, res){
-    res.redirect("/blogs")
+
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user; // whatever is with res.locals will be available to the templates
+    res.locals.error = req.flash("error")
+    res.locals.success = req.flash("success")
+    next(); // important
 })
 
-// Index
-
-app.get("/blogs", function (req, res){
-    Blog.find({}, function(err, blogs){
-        if(err){
-            console.log(err);
-        }else{
-            res.render("index", {blogs: blogs}) 
-        }
-    })
-})
+app.use("/", indexRoutes)
+app.use("/blogs", blogsRoutes)
 
 
-//NEW
 
-app.get("/blogs/new", function(req, res){
-    res.render("new")
-})
+app.set( 'port', ( process.env.PORT || 3000 ));
 
-
-// Create
-
-app.post("/blogs", function(req, res){
-    req.body.blog.body = req.sanitize(req.body.blog.body)
-    Blog.create(req.body.blog, function(err, newBlog){
-        if(err){
-            console.log(err);
-        }else{
-            res.redirect("/blogs")
-        }
-    })
-})
-
-
-//Show
-
-app.get("/blogs/:id", function(req, res){
-    Blog.findById(req.params.id, function(err, foundBlog){
-        if(err){
-            res.redirect("/blogs")
-            
-        }else{
-            res.render("show", {blog: foundBlog})
-        }
-    })
-})
-
-//Edit
-
-app.get("/blogs/:id/edit", function(req, res){
-    Blog.findById(req.params.id, function(err, foundBlog){
-        if(err){
-            res.redirect("/blogs")
-        }else{
-            res.render("edit", {blog: foundBlog})
-        }
-    })
-})
-
-// Update
-
-app.put("/blogs/:id", function(req, res){
-    req.body.blog.body = req.sanitize(req.body.blog.body)
-    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, updatedBlog){
-        if(err){
-            res.redirect("/blogs")
-        }else{
-            res.redirect("/blogs/" + req.params.id)
-        }
-    })
-})
-
-// Delete
-
-app.delete("/blogs/:id", function(req, res){
-    Blog.findByIdAndRemove(req.params.id, function(err){
-        if(err){
-            res.redirect("/blogs")
-        }else{
-            res.redirect("/blogs")
-        }
-    })
-})
-
-// Listening 
-app.listen(3000, function(){
-    console.log("running on 3000")
-})
+// Start node server
+app.listen( app.get( 'port' ), function() {
+  console.log( 'Node server is running on port ' + app.get( 'port' ));
+  });

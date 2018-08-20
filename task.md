@@ -1,6 +1,6 @@
 # TO-DO
 
-    Make modules and regroup things.
+    Make modules and regroup things. (postponded)
 
     Remove semantic UI and add Bootstrap.
 
