@@ -12,17 +12,17 @@
     <body>
         <div class="ui fixed inverted menu">
             <div class="ui container">
-                <div class="header item">
+                <div class="header item" style="margin-left:0;">
                     <i class="code icon"></i>
-                    Blog Site
+                    <a href="/" class="header item">Blog Site</a>
                 </div>
-                <a href="/" class="item">Home</a>
+
                 <a href="/blogs/new" class="item">New Post</a>
                 <% if (!currentUser){%>
-                    <a href="/login" class="item">Login</a>
-                    <a href="/register" class="item">Sign up</a>
+                    <a href="/login" class="right item">Login</a>
+                    <a href="/register" class=" item">Sign up</a>
                    <% }else {%>
-                    <a href="#"  class="item">Signed in as <%=currentUser.username%></a>
+                    <a href="#"  class="right item">Signed in as <%=currentUser.username%></a>
                     <a href="/logout" class="item">Logout</a>
                    <%};%>
             </div>
