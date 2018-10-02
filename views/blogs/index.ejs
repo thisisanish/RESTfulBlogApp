@@ -17,14 +17,15 @@
                     <div class="description">
                         <p><%- blog.body.substring(0,101) %>...</p>
                     </div>
-                    <a href="/blogs/<%= blog._id %>" style="text-decoration:none; color: #fff;"><div class="ui animated button violet button" tabindex="0" style="margin:2%;">
+                    <a href="/blogs/<%= blog._id %>" style="text-decoration:none; color: #fff;">
+                        <div class="ui animated button violet button" tabindex="0" style="margin:2%;">
                             <div class="visible content" >Read more</div>
                             <div class="hidden content">
                                 <i class="right small arrow icon"></i>
                             </div>
                     
-					</div>
-					<a href="/blogs/<%= blog._id %>" style="text-decoration:none; color: #fff;"></a>
+				        </div></a>
+					<!-- <a href="/blogs/<%= blog._id %>" style="text-decoration:none; color: #fff;"></a> -->
                     <div class="extra content" style="text-align:center;">
                             
                                 <span><em>Submitted by <%= blog.author.username %></em></span>
